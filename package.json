@@ -1,0 +1,8 @@
+{
+  "dependencies": {
+    "@threefold/grid_client": "^2.4.3"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.5"
+  }
+}
