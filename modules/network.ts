@@ -1,7 +1,6 @@
 import { Workload, expose } from "@threefold/grid_client";
 import {
   ArrayNotEmpty,
-  IsDefined,
   IsInt,
   IsNotEmpty,
   IsOptional,
@@ -44,7 +43,7 @@ class Mycelium {
   }
 }
 
-export class Znet extends Workload {
+export class Znet  {
   @Export() @IsString() @IsNotEmpty() network_ip_range: string;
   @Export() @IsString() @IsNotEmpty() subnet: string;
   @Export() @IsString() @IsNotEmpty() wg_private_key: string;
