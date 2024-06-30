@@ -29,11 +29,11 @@ export class Peer {
 
 const MyceliumKeyLen = 32
 class Mycelium {
-  @Expose() @IsString() @IsNotEmpty() @Length(32) key: string;
+  @Expose() @IsString() @IsNotEmpty() @Length(32) hex_key: string;
   @Expose() @IsOptional() @IsString({ each: true }) peers?: string[];
 
   challenge(): string {
-    let out = this.key
+    let out = this.hex_key
     if (!this.peers) return out;
     for (const peer of this.peers) {
       out += peer
@@ -44,21 +44,21 @@ class Mycelium {
 }
 
 export class Znet  {
-  @Expose() @IsString() @IsNotEmpty() network_ip_range: string;
+  @Expose() @IsString() @IsNotEmpty() ip_range: string;
   @Expose() @IsString() @IsNotEmpty() subnet: string;
-  @Expose() @IsString() @IsNotEmpty() wg_private_key: string;
-  @Expose() @IsInt() wg_listen_port: number;
+  @Expose() @IsString() @IsNotEmpty() wireguard_private_key: string;
+  @Expose() @IsInt() wireguard_listen_port: number;
   @Expose() @Type(()=>Peer) peers: Peer[];
   @Expose() @Type(()=>Mycelium) mycelium: Mycelium;
 
 
   challenge(): string {
-      let out = this.network_ip_range;
+      let out = this.ip_range;
       out+= this.subnet;
-      out+= this.wg_private_key;
-      out+= this.wg_listen_port;
+      out+= this.wireguard_private_key;
+      out+= this.wireguard_listen_port;
       this.peers.forEach(peer => out += peer.challenge());
-      out+= this.mycelium.challenge();
+      if(this.mycelium)out+= this.mycelium.challenge();
       return out;
   }
 }

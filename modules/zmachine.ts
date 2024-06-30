@@ -27,13 +27,18 @@ export class MachineNetwork {
   @Expose() @IsString() @IsNotEmpty() public_ip: string;
   @Expose() @IsBoolean() planetary: boolean;
   @Expose() @Type(() => MyceliumIP) mycelium: MyceliumIP;
-  @Expose() @Type(() => MachineInterface) @ValidateNested() Interfaces: MachineInterface[]
+  @Expose() @Type(() => MachineInterface) @ValidateNested() interfaces: MachineInterface[]
 
    challenge(): string {
     let out = this.public_ip;
     out += this.planetary.toString()
-    this.Interfaces.forEach(inter => out += inter.challenge)
-    out += this.mycelium.challenge();
+    for (let i = 0; i < this.interfaces.length; i++) {
+      out += this.interfaces[i].network;
+      out += this.interfaces[i].ip;
+    }
+    out += this.mycelium?.network || "";
+    out += this.mycelium?.hex_seed || "";
+    // out += this?.mycelium?.challenge();
     return out;
   }
 }
@@ -71,7 +76,7 @@ export class ZMachine {
    * disk size in bytes
    */
   @Expose() @IsInt() @Max(256*1024**4) size: number;
-  @Expose() @Type(()=> MachineCapacity) @ValidateNested() computeCapacity: MachineCapacity;
+  @Expose() @Type(()=> MachineCapacity) @ValidateNested() compute_capacity: MachineCapacity;
   @Expose() @Type(()=> MachineMount) @ValidateNested({each:true}) mounts: MachineMount[];
   @Expose() entrypoint: string;
   @Expose() env: Record<string, any>
@@ -80,16 +85,18 @@ export class ZMachine {
   challenge(): string {
     let out = this.flist;
     out+= this.network.challenge()
-    out+= this.size
-    out+= this.computeCapacity.challenge()
-    this.mounts.forEach(mount=> out+=mount.challenge())
+    out+= this.size || "0"
+    out+= this.compute_capacity.challenge()
+    for (let i = 0; i < this.mounts.length; i++) {
+      out += this.mounts[i].challenge();
+    }
     out+= this.entrypoint
     for(const key of Object.keys(this.env).sort()){
       out+= key;
       out+= "=";
       out+= this.env[key]
     }
-    out+= this.corex
+    // out+= this.corex
     return out;
   }
 
