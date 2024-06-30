@@ -3,7 +3,7 @@ import { IsString, IsInt, IsIP, IsNotEmpty, ValidateNested, IsBoolean, Min, Max 
 
 export class MachineInterface {
   @Expose() @IsString() @IsNotEmpty() network: string;
-  @Expose() @IsIP ip: string;
+  @Expose() @IsIP() ip: string;
 
   challenge(): string {
     let out = this.network;
@@ -24,12 +24,12 @@ export class MyceliumIP {
 }
 
 export class MachineNetwork {
-  @Expose() @IsString() @IsNotEmpty public_ip: string;
+  @Expose() @IsString() @IsNotEmpty() public_ip: string;
   @Expose() @IsBoolean() planetary: boolean;
   @Expose() @Type(() => MyceliumIP) mycelium: MyceliumIP;
   @Expose() @Type(() => MachineInterface) @ValidateNested() Interfaces: MachineInterface[]
 
-  readonly challenge(): string {
+   challenge(): string {
     let out = this.public_ip;
     out += this.planetary.toString()
     this.Interfaces.forEach(inter => out += inter.challenge)
@@ -38,7 +38,7 @@ export class MachineNetwork {
   }
 }
 
-export class MachineCapacity {
+ class MachineCapacity {
   @Expose() @IsInt() @Min(1) @Max(32) cpu: number;
   /**
    * Memory in Bytes
@@ -75,7 +75,7 @@ export class ZMachine {
   @Expose() @Type(()=> MachineMount) @ValidateNested({each:true}) mounts: MachineMount[];
   @Expose() entrypoint: string;
   @Expose() env: Record<string, any>
-  @Expose() @IsBoolean corex: boolean;
+  @Expose() @IsBoolean() corex: boolean;
 
   challenge(): string {
     let out = this.flist;

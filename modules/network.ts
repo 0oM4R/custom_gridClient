@@ -44,12 +44,12 @@ class Mycelium {
 }
 
 export class Znet  {
-  @Export() @IsString() @IsNotEmpty() network_ip_range: string;
-  @Export() @IsString() @IsNotEmpty() subnet: string;
-  @Export() @IsString() @IsNotEmpty() wg_private_key: string;
-  @Export() @IsInt wg_listen_port: number;
-  @Export() @Type(()=>Peer) peers: Peer[];
-  @Export() @Type(()=>Mycelium) mycelium: Mycelium;
+  @Expose() @IsString() @IsNotEmpty() network_ip_range: string;
+  @Expose() @IsString() @IsNotEmpty() subnet: string;
+  @Expose() @IsString() @IsNotEmpty() wg_private_key: string;
+  @Expose() @IsInt() wg_listen_port: number;
+  @Expose() @Type(()=>Peer) peers: Peer[];
+  @Expose() @Type(()=>Mycelium) mycelium: Mycelium;
 
 
   challenge(): string {

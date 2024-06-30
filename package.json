@@ -1,8 +1,12 @@
 {
   "dependencies": {
-    "@threefold/grid_client": "^2.4.3"
+    "@threefold/grid_client": "^2.4.3",
+    "@threefold/rmb_direct_client": "^2.5.0-rc3",
+    "ts-node": "^10.9.2"
   },
   "devDependencies": {
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.14.1",
     "typescript": "^5.4.5"
   }
 }
